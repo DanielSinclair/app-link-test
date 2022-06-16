@@ -54,6 +54,16 @@ export default function Home() {
             <p>Set the window.location.href to rnbwapp.com after 1s</p>
           </a>
 
+          <a href="https://rnbwapp.com/token?addr=eth" className={styles.card}>
+            <h2>Token &rarr;</h2>
+            <p>Open the universal link for the ETH token view</p>
+          </a>
+
+          <a href="https://rnbwapp.com/imhiring.eth" className={styles.card}>
+            <h2>Profile &rarr;</h2>
+            <p>Open the universal link for an ENS profile</p>
+          </a>
+
         </div>
       </main>
 
