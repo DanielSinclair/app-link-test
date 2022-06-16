@@ -25,20 +25,65 @@ provider.on("disconnect", (code, reason) => {
   console.log("disconnect: ", code, reason)
 })
 
-const WCButton = ({}) => {
+const WCConnectButton = ({ connection, connect, disconnect }) => {
+
+  const connectAction = (e) => {
+    e.preventDefault()
+    connect()
+  }
+
+  const disconnectAction = (e) => {
+    e.preventDefault()
+    disconnect()
+  }
+  
+  return (!connection ?
+    <a href="" onClick={connectAction} className={styles.card}>
+      <h2>Connect Wallet &rarr;</h2>
+      <p>Launch the standard WalletConnect modal</p>
+    </a>
+    :
+    <a href="" onClick={disconnectAction} className={styles.card}>
+      <h2>Disconnect Wallet &rarr;</h2>
+      <p style={{ overflowWrap: "break-word" }}>Connected to {connection.address}</p>
+    </a>
+  )
+}
+
+const SendTransactionButton = ({ connection }) => {
+
+  const sendTransaction = (e) => {
+    e.preventDefault()
+    connection.signer.sendTransaction({
+      to: connection.address,
+      value: 0
+    })
+  }
+
+  return (
+    connection ? 
+      <a href="" onClick={sendTransaction} className={styles.card}>
+        <h2>Send Transaction &rarr;</h2>
+        <p>Prompt the wallet to approve a transaction</p>
+      </a>
+    : <></>
+  )
+}
+
+const Home = () => {
 
   const [connected, setConnected] = useLocalStorage("connected", false)
   const [connection, setConnection] = useState(null)
 
   useEffect(() => {
-    if (connected) init()
+    if (connected) connect()
   }, [])
 
   useEffect(() => {
     setConnected(connection ? true : false)
   }, [connection])
 
-  const connect = async () => {
+  const _connect = async () => {
     const accounts = await provider.enable()
     const address = getAddress(accounts[0])
     const signer = new providers.Web3Provider(provider).getSigner(address)
@@ -47,36 +92,15 @@ const WCButton = ({}) => {
     setConnection({ address, deepLinkUrl, signer })
   }
 
-  const init = async () => {
-    try { await connect() } 
+  const connect = async () => {
+    try { await _connect() } 
     catch (e) { console.error(e) }
   }
 
-  const mountModal = (e) => {
-    e.preventDefault()
-    init()
-  }
-
-  const disconnect = (e) => {
-    e.preventDefault()
+  const disconnect = async () => {
     provider.disconnect()
     setConnection(null)
   }
-
-  return (!connection ?
-    <a href="" onClick={mountModal} className={styles.card}>
-      <h2>Connect Wallet &rarr;</h2>
-      <p>Launch the standard WalletConnect modal</p>
-    </a>
-    :
-    <a href="" onClick={disconnect} className={styles.card}>
-      <h2>Disconnect Wallet &rarr;</h2>
-      <p style={{ overflowWrap: "break-word" }}>Connected to {connection.address}</p>
-    </a>
-  )
-}
-
-const Home = () => {
 
   const handleWindowRedirect = (e) => {
     e.preventDefault()
@@ -146,8 +170,9 @@ const Home = () => {
             <p>Set the window.location.href to rnbwapp.com/wc after 1s</p>
           </a>
 
-          <WCButton/>
+          <WCConnectButton {...{ connection, connect, disconnect }}/>
 
+          <SendTransactionButton connection={connection}/>
         </div>
       </main>
 
