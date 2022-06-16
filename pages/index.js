@@ -1,19 +1,18 @@
 
 import Head from 'next/head'
 import Image from 'next/image'
-//import React, { useEffect } from "react"
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
 
   const handleWindowRedirect = (e) => {
     e.preventDefault()
-    window.location.href = "https://rnbwapp.com/"
+    window.location.href = e.target.href || e.target.parentElement.href
   }
 
   const handleTimedRedirect = (e) => {
     e.preventDefault()
-    setTimeout(() => window.location.href = "https://rnbwapp.com/", 1000)
+    setTimeout(() => window.location.href = e.target.href || e.target.parentElement.href, 1000)
   }
 
   return (
@@ -44,14 +43,24 @@ export default function Home() {
             <p>Test the rainbow:// deep link URI scheme href</p>
           </a>
 
-          <a href="" onClick={handleWindowRedirect} className={styles.card}>
+          <a href="https://rnbwapp.com/" onClick={handleWindowRedirect} className={styles.card}>
             <h2>Window Redirect &rarr;</h2>
             <p>Set the window.location.href to rnbwapp.com</p>
           </a>
 
-          <a href="" onClick={handleTimedRedirect} className={styles.card}>
+          <a href="https://rnbwapp.com/" onClick={handleTimedRedirect} className={styles.card}>
             <h2>Timed Redirect &rarr;</h2>
             <p>Set the window.location.href to rnbwapp.com after 1s</p>
+          </a>
+
+          <a href="https://rnbwapp.com/wc" onClick={handleWindowRedirect} className={styles.card}>
+            <h2>WC Redirect &rarr;</h2>
+            <p>Set the window.location.href to rnbwapp.com/wc</p>
+          </a>
+
+          <a href="https://rnbwapp.com/wc" onClick={handleTimedRedirect} className={styles.card}>
+            <h2>WC Timed Redirect &rarr;</h2>
+            <p>Set the window.location.href to rnbwapp.com/wc after 1s</p>
           </a>
 
           <a href="https://rnbwapp.com/token?addr=eth" className={styles.card}>
