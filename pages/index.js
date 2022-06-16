@@ -2,8 +2,32 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import WalletConnectProvider from "@walletconnect/ethereum-provider"
+import { useState } from "react"
+
+const provider = new WalletConnectProvider({
+  chainId: 1, // Mainnet
+  infuraId: "84842078b09946638c03157f83405213", // Default ID
+})
 
 export default function Home() {
+
+  const [connection, setConnection] = useState(null)
+
+  const connect = async () => {
+    const accounts = await provider.enable()
+    const address = getAddress(accounts[0])
+    const signer = new providers.Web3Provider(provider).getSigner(address)
+    const deepLinkJson = localStorage.getItem("WALLETCONNECT_DEEPLINK_CHOICE")
+    const deepLinkUrl = deepLinkJson ? JSON.parse(deepLinkJson).href : null
+    setConnection({ address, deepLinkUrl, signer })
+  }
+
+  const mountModal = (e) => {
+    e.preventDefault()
+    const init = async () => await connect()
+    init()
+  }
 
   const handleWindowRedirect = (e) => {
     e.preventDefault()
@@ -43,6 +67,16 @@ export default function Home() {
             <p>Test the rainbow:// deep link URI scheme href</p>
           </a>
 
+          <a href="https://rnbwapp.com/token?addr=eth" className={styles.card}>
+            <h2>Token &rarr;</h2>
+            <p>Open the universal link for the ETH token view</p>
+          </a>
+
+          <a href="https://rnbwapp.com/imhiring.eth" className={styles.card}>
+            <h2>Profile &rarr;</h2>
+            <p>Open the universal link for an ENS profile</p>
+          </a>
+
           <a href="https://rnbwapp.com/" onClick={handleWindowRedirect} className={styles.card}>
             <h2>Window Redirect &rarr;</h2>
             <p>Set the window.location.href to rnbwapp.com</p>
@@ -63,14 +97,9 @@ export default function Home() {
             <p>Set the window.location.href to rnbwapp.com/wc after 1s</p>
           </a>
 
-          <a href="https://rnbwapp.com/token?addr=eth" className={styles.card}>
-            <h2>Token &rarr;</h2>
-            <p>Open the universal link for the ETH token view</p>
-          </a>
-
-          <a href="https://rnbwapp.com/imhiring.eth" className={styles.card}>
-            <h2>Profile &rarr;</h2>
-            <p>Open the universal link for an ENS profile</p>
+          <a href="" onClick={mountModal} className={styles.card}>
+            <h2>WC Modal &rarr;</h2>
+            <p>Launch the standard WalletConnect modal</p>
           </a>
 
         </div>
