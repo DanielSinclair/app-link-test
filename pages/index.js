@@ -2,17 +2,41 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { useState, useEffect } from "react"
+import { providers } from "ethers"
+import { getAddress } from "ethers/lib/utils"
 import WalletConnectProvider from "@walletconnect/ethereum-provider"
-import { useState } from "react"
+import useLocalStorage from "use-local-storage"
 
 const provider = new WalletConnectProvider({
   chainId: 1, // Mainnet
-  infuraId: "84842078b09946638c03157f83405213", // Default ID
+  infuraId: "693d1f7a93cf423292831b166172b0ca" // Default ID
 })
 
-export default function Home() {
+provider.on("accountsChanged", (accounts) => {
+  console.log("accountsChanged: ", accounts)
+})
 
+provider.on("chainChanged", (chainId) => {
+  console.log("chainChanged: ", chainId)
+})
+
+provider.on("disconnect", (code, reason) => {
+  console.log("disconnect: ", code, reason)
+})
+
+const WCButton = ({}) => {
+
+  const [connected, setConnected] = useLocalStorage("connected", false)
   const [connection, setConnection] = useState(null)
+
+  useEffect(() => {
+    if (connected) init()
+  }, [])
+
+  useEffect(() => {
+    setConnected(connection ? true : false)
+  }, [connection])
 
   const connect = async () => {
     const accounts = await provider.enable()
@@ -23,11 +47,36 @@ export default function Home() {
     setConnection({ address, deepLinkUrl, signer })
   }
 
+  const init = async () => {
+    try { await connect() } 
+    catch (e) { console.error(e) }
+  }
+
   const mountModal = (e) => {
     e.preventDefault()
-    const init = async () => await connect()
     init()
   }
+
+  const disconnect = (e) => {
+    e.preventDefault()
+    provider.disconnect()
+    setConnection(null)
+  }
+
+  return (!connection ?
+    <a href="" onClick={mountModal} className={styles.card}>
+      <h2>Connect Wallet &rarr;</h2>
+      <p>Launch the standard WalletConnect modal</p>
+    </a>
+    :
+    <a href="" onClick={disconnect} className={styles.card}>
+      <h2>Disconnect Wallet &rarr;</h2>
+      <p style={{ overflowWrap: "break-word" }}>Connected to {connection.address}</p>
+    </a>
+  )
+}
+
+const Home = () => {
 
   const handleWindowRedirect = (e) => {
     e.preventDefault()
@@ -97,10 +146,7 @@ export default function Home() {
             <p>Set the window.location.href to rnbwapp.com/wc after 1s</p>
           </a>
 
-          <a href="" onClick={mountModal} className={styles.card}>
-            <h2>WC Modal &rarr;</h2>
-            <p>Launch the standard WalletConnect modal</p>
-          </a>
+          <WCButton/>
 
         </div>
       </main>
@@ -120,3 +166,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default Home
