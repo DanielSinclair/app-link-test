@@ -145,12 +145,12 @@ const Home = () => {
             <p>Test the rainbow:// deep link URI scheme href</p>
           </a>
 
-          <a href="https://rainbow.me/token?addr=eth" className={styles.card}>
+          <a href="https://rnbwapp.com/token?addr=eth" className={styles.card}>
             <h2>Token &rarr;</h2>
             <p>Open the universal link for the ETH token view</p>
           </a>
 
-          <a href="https://rainbow.me/imhiring.eth" className={styles.card}>
+          <a href="https://rnbwapp.com/imhiring.eth" className={styles.card}>
             <h2>Profile &rarr;</h2>
             <p>Open the universal link for an ENS profile</p>
           </a>
@@ -165,7 +165,7 @@ const Home = () => {
             <p>Set the window.location.href to rnbwapp.com after 1s</p>
           </a>
 
-          <a href="https://rainbow.me/imhiring.eth" onClick={handleTimedRedirect} className={styles.card}>
+          <a href="https://rnbwapp.com/imhiring.eth" onClick={handleTimedRedirect} className={styles.card}>
             <h2>Profile Timed Redirect &rarr;</h2>
             <p>Set the window.location.href to a Profile after 1s</p>
           </a>
