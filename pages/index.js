@@ -165,6 +165,11 @@ const Home = () => {
             <p>Set the window.location.href to rnbwapp.com after 1s</p>
           </a>
 
+          <a href="https://rnbwapp.com/imhiring.eth" onClick={handleTimedRedirect} className={styles.card}>
+            <h2>Profile Timed Redirect &rarr;</h2>
+            <p>Set the window.location.href to rnbwapp.com after 1s</p>
+          </a>
+
           <a href="https://apps.apple.com/us/app/rainbow-ethereum-wallet/id1457119021" onClick={handleTimedRedirect} className={styles.card}>
             <h2>App Store Timed Redirect &rarr;</h2>
             <p>Set the window.location.href to rnbwapp.com after 1s</p>
