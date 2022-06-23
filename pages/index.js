@@ -54,7 +54,12 @@ const SendTransactionButton = ({ connection }) => {
 
   const sendTransaction = (e) => {
     e.preventDefault()
-    connection.signer.sendTransaction({
+    try { _sendTransaction() } 
+    catch (e) { console.error(e) }
+  }
+
+  const _sendTransaction = async () => {
+    await connection.signer.sendTransaction({
       to: connection.address,
       value: 0
     })
@@ -157,6 +162,11 @@ const Home = () => {
 
           <a href="https://rnbwapp.com/" onClick={handleTimedRedirect} className={styles.card}>
             <h2>Timed Redirect &rarr;</h2>
+            <p>Set the window.location.href to rnbwapp.com after 1s</p>
+          </a>
+
+          <a href="https://apps.apple.com/us/app/rainbow-ethereum-wallet/id1457119021" onClick={handleTimedRedirect} className={styles.card}>
+            <h2>App Store Timed Redirect &rarr;</h2>
             <p>Set the window.location.href to rnbwapp.com after 1s</p>
           </a>
 
