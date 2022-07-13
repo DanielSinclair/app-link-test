@@ -160,6 +160,11 @@ const Home = () => {
             <p>Set the window.location.href to rnbwapp.com</p>
           </a>
 
+          <a href="https://rnbwapp.com/wc" className={styles.card}>
+            <h2>WC Fallback Redirect &rarr;</h2>
+            <p>Set the window.location.href to rnbwapp.com/wc</p>
+          </a>
+
           <a href="https://rnbwapp.com/" onClick={handleTimedRedirect} className={styles.card}>
             <h2>Timed Redirect &rarr;</h2>
             <p>Set the window.location.href to rnbwapp.com after 1s</p>
